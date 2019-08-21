@@ -76,7 +76,7 @@ def process_log_data(spark, input_data, output_data):
     
     df.createOrReplaceTempView("staging_events")
     # extract columns for users table
-    users_table = spark.sql(users_query)
+    users_table = spark.sql(users_query).dropDuplicates(['userId', 'level'])
     # write users table to parquet files
     users_table.write.parquet(path = output_data + "/users/users.parquet", mode = "overwrite")
     
